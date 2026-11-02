@@ -86,9 +86,8 @@ if st.button("🔮 철학적 최적 번호 조합 추출하기", type="primary")
         
     st.success("조합 도출 완료!")
     
-    # 번호 예쁘게 출력
     cols = st.columns(6)
     for i, num in enumerate(numbers):
         cols[i].metric(label=f"번호 {i+1}", value=f"{num:02d}")
         
-    st.info(f"📊 **통계적 검증 (`중용 필터` 통과)**\n- 번호 총합: **{total_sum}** (정규분포 중심 구간)\n- 홀수 개수: **{odds_count개}** / 짝수 개수: **{6-odds_count}개**")
+    st.info(f"📊 **통계적 검증 (`중용 필터` 통과)**\n- 번호 총합: **{total_sum}** (정규분포 중심 구간)\n- 홀수 개수: **{odds_count}개** / 짝수 개수: **{6-odds_count}개**")
