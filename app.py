@@ -2,7 +2,6 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 
-# 스트림릿 페이지 설정
 st.set_page_config(page_title="역·중용 로또 예측 엔진", page_icon="🎲", layout="centered")
 
 class UnifiedPhilosophyLottoEngine:
@@ -36,29 +35,19 @@ class UnifiedPhilosophyLottoEngine:
 
     def generate_balanced_combination(self):
         elem_w, _ = self.calculate_element_weights()
-        
-        number_weights = []
-        for num in self.num_pool:
-            el = self.element_map[num]
-            number_weights.append(elem_w[el])
-            
-        number_weights = np.array(number_weights)
-        number_weights = number_weights / np.sum(number_weights)
+        number_weights = [elem_w[self.element_map[n]] for n in self.num_pool]
+        number_weights = np.array(number_weights) / np.sum(number_weights)
         
         while True:
             candidate = sorted(np.random.choice(self.num_pool, size=6, replace=False, p=number_weights))
             total = sum(candidate)
             odds_count = sum(1 for n in candidate if n % 2 != 0)
-            
-            # 중용 필터 (합계 115~155, 홀짝 비율 2:4 ~ 4:2)
             if 115 <= total <= 155 and 2 <= odds_count <= 4:
                 return candidate, total, odds_count
 
-# --- 스트림릿 UI 구성 ---
 st.title("🎲 역(易)·중용(中庸) 통합 로또 예측 엔진")
 st.markdown("동양철학의 변화와 균형(중용 필터)을 융합한 확률 모델입니다.")
 
-# 샘플 역사 데이터
 history_data = [
     [5, 12, 23, 28, 34, 41],
     [2, 15, 22, 33, 39, 44],
@@ -74,7 +63,6 @@ if st.button("🔮 철학적 최적 번호 조합 추출하기", type="primary")
         numbers, total_sum, odds_count = engine.generate_balanced_combination()
         
     st.success("조합 도출 완료!")
-    
     cols = st.columns(6)
     for i, num in enumerate(numbers):
         cols[i].metric(label=f"번호 {i+1}", value=f"{num:02d}")
